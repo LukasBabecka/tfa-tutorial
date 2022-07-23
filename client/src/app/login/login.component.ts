@@ -19,7 +19,6 @@ enum Mode {
 export class LoginComponent implements OnInit, ViewDidEnter {
   Mode = Mode;
   twoFactorRequired = false;
-  lastEmail: String;
 
   loginForm: FormGroup = new FormGroup<any>({
     email: new FormControl('', [Validators.required, Validators.email]),

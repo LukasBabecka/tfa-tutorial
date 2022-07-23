@@ -42,7 +42,11 @@ mongoose.connect(
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
-    next(new NotFoundError());
+    if (!req.url.toString().startsWith('/api')){
+        res.redirect('/');
+    }else {
+        next(new NotFoundError());
+    }
 });
 
 // error handler
