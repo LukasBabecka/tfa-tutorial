@@ -102,6 +102,7 @@ export class LoginComponent implements OnInit, ViewDidEnter {
 
   ionViewDidEnter(): void {
     this.selectedMode = Mode.Login;
+    this.twoFactorRequired = false;
     this.loginForm.reset();
     this.registerForm.reset();
 
