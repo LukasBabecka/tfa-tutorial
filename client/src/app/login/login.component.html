@@ -1,0 +1,75 @@
+<ion-content>
+  <div class="h-100 w-100 d-flex justify-content-center align-items-center">
+    <ion-card class="ion-padding">
+      <ion-segment (ionChange)="onSegmentChange($event.target.value)"
+                   [value]="selectedMode" style="width: 400px;" class="mb-4" color="tertiary">
+        <ion-segment-button value="{{Mode.Login}}">
+          <ion-label>Login</ion-label>
+        </ion-segment-button>
+        <ion-segment-button value="{{Mode.Register}}">
+          <ion-label>Register</ion-label>
+        </ion-segment-button>
+      </ion-segment>
+
+      <ion-icon style="font-size: 6rem;" class="d-block mx-auto" name="person-circle-outline"></ion-icon>
+
+      <ng-container *ngIf="selectedMode === Mode.Login">
+
+        <form class="mt-3" [formGroup]="loginForm" (ngSubmit)="onLoginSubmit()">
+
+          <ng-container *ngIf="!twoFactorRequired">
+            <ion-item>
+              <ion-label position="floating">Email</ion-label>
+              <ion-input formControlName="email"></ion-input>
+            </ion-item>
+
+            <ion-item>
+              <ion-label position="floating">Passoword</ion-label>
+              <ion-input formControlName="password" type="password"></ion-input>
+            </ion-item>
+          </ng-container>
+
+
+          <ion-item *ngIf="twoFactorRequired">
+            <ion-label position="floating">Two-Factor Auth Code</ion-label>
+            <ion-input formControlName="token"></ion-input>
+          </ion-item>
+
+
+
+          <ion-button type="submit" class="ion-margin-top mt-5" expand="full" [disabled]="!loginForm.valid">Login</ion-button>
+          <ion-button (click)="onTwoFactorLoginCancelClick()" *ngIf="twoFactorRequired" class="ion-margin-top" expand="full" color="danger">Cancel</ion-button>
+        </form>
+      </ng-container>
+
+      <ng-container *ngIf="selectedMode === Mode.Register">
+        <form [formGroup]="registerForm" (ngSubmit)="onRegisterSubmit()">
+          <ion-item>
+            <ion-label position="floating">First Name</ion-label>
+            <ion-input formControlName="firstName"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Last Name</ion-label>
+            <ion-input formControlName="lastName"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Email</ion-label>
+            <ion-input formControlName="email"></ion-input>
+          </ion-item>
+
+          <ion-item>
+            <ion-label position="floating">Passoword</ion-label>
+            <ion-input formControlName="password" type="password"></ion-input>
+          </ion-item>
+
+          <ion-button type="submit" class="ion-margin-top mt-5" expand="full">Register</ion-button>
+        </form>
+      </ng-container>
+    </ion-card>
+  </div>
+</ion-content>
+
+
+

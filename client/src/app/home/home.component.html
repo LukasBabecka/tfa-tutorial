@@ -1,0 +1,93 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <div class="container d-flex">
+      <ion-title>
+        2fa Tutorial
+      </ion-title>
+
+      <div class="ms-auto d-flex">
+        <ion-buttons>
+          <ion-button id="open-settings">Settings</ion-button>
+        </ion-buttons>
+
+        <ion-buttons>
+          <ion-button (click)="onLogOutClick()">Log Out</ion-button>
+        </ion-buttons>
+      </div>
+    </div>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <div class="d-flex align-items-center justify-content-center h-75">
+    <div class="text-center">
+      <ion-label>
+        <h1>Hi {{user?.firstName}} {{user?.lastName}}, you're logged in</h1>
+      </ion-label>
+
+      <ion-icon class="d-inline-block mt-2" style="font-size: 3rem;" name="happy-outline"></ion-icon>
+    </div>
+  </div>
+
+
+  <ion-modal trigger="open-settings" #settingsModal>
+    <ng-template>
+      <ion-header>
+        <ion-toolbar>
+          <ion-buttons slot="end">
+            <ion-button (click)="onSettingsCancelClick()">
+              <ion-icon slot="icon-only" name="close-outline"></ion-icon>
+            </ion-button>
+          </ion-buttons>
+          <ion-title>Settings</ion-title>
+        </ion-toolbar>
+      </ion-header>
+      <ion-content class="ion-padding text-center">
+        <ion-button shape="round" *ngIf="!user.tfAuthInfo" (click)="onEnableTwoFactorAuthClick()">Enable Two-Factor Authorization</ion-button>
+
+        <ng-container *ngIf="user.tfAuthInfo">
+          <ion-label>
+            <h2 style="font-size: 1.3rem;">Two-Factor Authorization Setup </h2>
+
+            <p style="font-size: 1rem;" class="mt-3">Scan the QR code in the Google Authenticator app.</p>
+          </ion-label>
+
+          <div class="d-flex mt-4 justify-content-center">
+            <a href="https://play.google.com/store/apps/details?id=com.google.android.apps.authenticator2&hl=en_CA&gl=US" target="_blank">
+              <ion-img src="assets/images/play-store.jpg" style="height: 25px;"></ion-img>
+            </a>
+            <a href="https://apps.apple.com/us/app/google-authenticator/id388497605" target="_blank">
+              <ion-img class="ms-5" src="assets/images/app-store.jpg" style="height: 25px;"></ion-img>
+            </a>
+          </div>
+
+          <ion-img class="d-block mx-auto mt-4" style="max-width: 200px;" [src]="user.tfAuthInfo?.qc"></ion-img>
+
+          <ion-label class="ion-nowrap d-block mt-4">
+            <p>Enter token to enable two-factor authentication:</p>
+          </ion-label>
+
+          <ng-container *ngIf="!user.tfAuthInfo.confirmed">
+            <ion-item class="mx-auto" style="max-width: 100px;">
+              <ion-input #tfToken class="border"></ion-input>
+            </ion-item>
+
+            <ion-button (click)="onConfirmTwoFactorAuthClick(tfToken.value?.toString())"
+                        [disabled]="!tfToken.value"
+                        class="mt-3" fill="outline" shape="round">Confirm</ion-button>
+          </ng-container>
+
+          <ng-container *ngIf="user.tfAuthInfo.confirmed">
+            <ion-button (click)="onRemoveTwoFactorAuthClick()"
+                        color="danger"
+                        class="mt-3" fill="outline" shape="round">Disable</ion-button>
+          </ng-container>
+        </ng-container>
+      </ion-content>
+    </ng-template>
+  </ion-modal>
+</ion-content>
+
+
+
+
