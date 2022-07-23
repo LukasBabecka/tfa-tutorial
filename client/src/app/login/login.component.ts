@@ -4,7 +4,7 @@ import {UserService} from "../core/services/user.service";
 import {firstValueFrom} from "rxjs";
 import {LoginResult} from "../core/models/user.model";
 import {Router} from "@angular/router";
-import {LoadingController} from "@ionic/angular";
+import {LoadingController, ViewDidEnter} from "@ionic/angular";
 
 enum Mode {
   Login,
@@ -16,7 +16,7 @@ enum Mode {
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, ViewDidEnter {
   Mode = Mode;
   twoFactorRequired = false;
   lastEmail: String;
@@ -41,7 +41,9 @@ export class LoginComponent implements OnInit {
     private router: Router,
     private loadingController: LoadingController) { }
 
-  ngOnInit() {}
+  ngOnInit() {
+  }
+
 
   async onLoginSubmit() {
     await this.showLoader();
@@ -97,5 +99,11 @@ export class LoginComponent implements OnInit {
 
   onSegmentChange(value: string) {
     this.selectedMode = Number(value);
+  }
+
+  ionViewDidEnter(): void {
+    this.selectedMode = Mode.Login;
+    this.loginForm.reset();
+    this.registerForm.reset();
   }
 }
