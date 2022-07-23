@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 import {UserService} from "../core/services/user.service";
-import {firstValueFrom} from "rxjs";
+import {first, firstValueFrom} from "rxjs";
 import {LoginResult} from "../core/models/user.model";
 import {Router} from "@angular/router";
 import {LoadingController, ViewDidEnter} from "@ionic/angular";
@@ -104,5 +104,12 @@ export class LoginComponent implements OnInit, ViewDidEnter {
     this.selectedMode = Mode.Login;
     this.loginForm.reset();
     this.registerForm.reset();
+
+    this.userService.currentUser$.pipe(
+      first()
+    ).subscribe(u => {
+      if (u?.token)
+        this.router.navigateByUrl('/home');
+    });
   }
 }
